@@ -2,14 +2,10 @@ from django.db import models
 
 # Create your models here.
 
-class Coord(models.Model):
-    x = models.DecimalField(max_digits=10, decimal_places=8)
-    y = models.DecimalField(max_digits=10, decimal_places=8)
-
-
 class Fire(models.Model):
     id = models.IntegerField(primary_key=True)
-    coord = models.ForeignKey(Coord, on_delete=models.CASCADE)
+    x_coord = models.DecimalField(max_digits=10, decimal_places=8, default=0)
+    y_coord = models.DecimalField(max_digits=10, decimal_places=8, default=0)
     startDate = models.DateTimeField(auto_now_add=True)
     
     class StateEnum(models.TextChoices):

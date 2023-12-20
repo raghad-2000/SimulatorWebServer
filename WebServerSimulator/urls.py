@@ -16,10 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from rest_framework import routers
+
+from Simulator.views import FireViewSet
+
+router = routers.SimpleRouter()
+router.register('fire', FireViewSet, basename='fire')
 
 urlpatterns = [
     
     path("simulator/", include("Simulator.urls")),
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/', include(router.urls))
 ]
