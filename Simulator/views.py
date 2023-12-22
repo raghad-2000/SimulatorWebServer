@@ -1,9 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
-from rest_framework import status
 
 from Simulator.models import Fire
 from Simulator.serializers import FireSerializer
@@ -16,16 +14,13 @@ class FireViewSet(ModelViewSet):
 
     serializer_class = FireSerializer
     queryset = Fire.objects.all()
-  
-    def list(self, request):
-        serializer = FireSerializer(self.queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def create(self, request):
-        serializer = FireSerializer(data=request.data, many=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        many = isinstance(request.data, list)
+        serializer = self.get_serializer(data=request.data, many=many)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, headers=headers)
 
     http_method_names = ['get', 'post']
