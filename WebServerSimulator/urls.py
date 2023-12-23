@@ -18,15 +18,17 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
-from Simulator.views import FireViewSet
+from rest_framework.authtoken.views import obtain_auth_token
+from Simulator.views import FireViewSet, SensorViewSet
 
 router = routers.SimpleRouter()
 router.register('fire', FireViewSet, basename='fire')
+router.register('sensor', SensorViewSet, basename='sensor')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("simulator/", include("Simulator.urls")),
-    path('api-auth/', include('rest_framework.urls')),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
     path('api/', include(router.urls)),
 ]
 

@@ -1,5 +1,18 @@
-py -m pip install -r requirements.txt
+ ## Docker commands
 
-py manage.py migrate
+- docker volume create pgdata
+- docker compose up --build
 
-py manage.py runserver
+## Utilisateurs
+
+admin : 
+
+- username: root
+- password: root
+
+user :
+- username: client2
+- password: clipass2
+
+
+
