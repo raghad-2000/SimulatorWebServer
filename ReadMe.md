@@ -1,6 +1,5 @@
  ## Docker commands
 
-- docker volume create pgdata
 - docker compose up --build
 
 ## Utilisateurs
