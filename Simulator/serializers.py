@@ -8,6 +8,13 @@ class FireSerializer(ModelSerializer):
         model = Fire
         fields = ['id', 'x_coord', 'y_coord', 'startDate', 'state']
 
+
+class SensorSerializer(ModelSerializer):
+
+    class Meta:
+        model = Sensor
+        fields = ['id', 'temperature', 'x_coord', 'y_coord']
+
 class SensorDataSerializer(ModelSerializer):
 
     class Meta:

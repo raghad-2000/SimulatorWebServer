@@ -38,11 +38,7 @@
     }
 
 	let map;
-	async function fetchMarkers(request) {
-		const response = await fetch(request);
-		const markers = await response.json();
-		return markers;
-	}
+
 	async function initMapEmptyClassic(){
 		const { Map } = (await google.maps.importLibrary('maps'));
 		map = new Map(document.getElementById('map'), {
@@ -52,18 +48,16 @@
 	}
 	async function initMapWithAMarker() {
 		const { Map } = await google.maps.importLibrary('maps');
-		const { AdvancedMarkerElement } = await google.maps.importLibrary('marker');
+		const { Marker } = await google.maps.importLibrary('marker');
 
 		const map = new Map(document.getElementById('map'), {
 			center: { lat: 45.70551092310581, lng: 4.8882087731481985 },
 			zoom: 5,
 			mapId: '4504f8b37365c3d0'
 		});
-		const markers = Object.values(
-			await fetchMarkers(
-				'https://flytta-database-default-rtdb.europe-west1.firebasedatabase.app/markers/.json'
-			)
-		);
+		let list_senso_parser = document.createElement("div"); 
+		list_senso_parser.innerHTML = `{{ list_sensors }}`;
+		const markers = JSON.parse(list_senso_parser.innerText);
 		const waypts = [];
 		let count = -1;
 		markers.forEach((mark, index) => {
@@ -79,17 +73,17 @@
 				'<div style="background-color: #4285f4;border-radius: 8px;color: #ffffff;font-size: 14px;padding: 10px 15px;position: relative;"><h2>' +
 				mark.title +
 				'</h2></div>';
-			const marker = new AdvancedMarkerElement({
+			const marker = new Marker({
 				map,
-				position: { lat: mark.latitude, lng: mark.longitude },
-				content: markerHtml
+				position: { lat: Number(mark.x_coord), lng: Number(mark.y_coord) }
 			});
 			marker.addListener('click', () => {
 				document.getElementById('MarkerDialog').style.display = 'flex';
 				document.getElementById('markerTitle').innerHTML = mark.title;
 				document.getElementById('descriptionWrapper').innerHTML = mark.description;
 			});
-			waypts.push({ location: { lat: mark.latitude, lng: mark.longitude }, stopover: true });
+			if (index > 0 && index < 4)
+				waypts.push({ location: { lat: Number(mark.x_coord), lng: Number(mark.y_coord) }, stopover: true });
 			count++;
 		});
 		var directionsService = new google.maps.DirectionsService();
@@ -97,8 +91,9 @@
 			suppressMarkers: true
 		});
 		directionsRenderer.setMap(map);
-		var start = { lat: markers[0].latitude, lng: markers[0].longitude };
-		var end = { lat: markers[count].latitude, lng: markers[count].longitude };
+		var start = { lat: Number(markers[0].x_coord), lng: Number(markers[0].y_coord) };
+		//waypts.push({ location:{ lat: Number(markers[1].x_coord), lng: Number(markers[1].y_coord) }, stopover: true});
+		var end = { lat: Number(markers[3].x_coord), lng: Number(markers[3].y_coord) };
 		var request = {
 			origin: start,
 			destination: end,
@@ -115,8 +110,9 @@
 		initMapWithAMarker();
 	}
 	// initMapWithAMarker();
+	
 </script>
-
+{{list_sensors}}
 <div id="map"></div>
 
 <dialog
