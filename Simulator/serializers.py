@@ -1,28 +1,22 @@
-from rest_framework.serializers import ModelSerializer, SlugRelatedField
+from rest_framework.serializers import ModelSerializer, IntegerField
  
-from Simulator.models import Fire, Sensor
+from Simulator.models import Fire, Sensor, SensorReading
 
 class FireSerializer(ModelSerializer):
 
     class Meta:
         model = Fire
-        fields = ['id', 'x_coord', 'y_coord', 'startDate', 'state']
-
-
+        fields = ['id', 'lat', 'lon', 'startDate', 'state']
+        
 class SensorSerializer(ModelSerializer):
 
     class Meta:
         model = Sensor
-        fields = ['id', 'temperature', 'x_coord', 'y_coord']
+        fields = ['id', 'lat', 'lon']
 
-class SensorDataSerializer(ModelSerializer):
-
-    class Meta:
-        model = Sensor
-        fields = ['id', 'temperature']
-
-class SensorPositionSerializer(ModelSerializer):
+class SensorReadingSerializer(ModelSerializer):
+    id = IntegerField(source='sensor.id')
 
     class Meta:
-        model = Sensor
-        fields = ['id', 'x_coord', 'y_coord']
+        model = SensorReading
+        fields = ['id', 'data']

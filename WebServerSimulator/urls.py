@@ -19,11 +19,12 @@ from django.urls import include, path
 from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.authtoken.views import obtain_auth_token
-from Simulator.views import FireViewSet, SensorViewSet
+from Simulator.views import FireViewSet, SensorViewSet, SensorReadingViewSet
 
 router = routers.SimpleRouter()
 router.register('fire', FireViewSet, basename='fire')
 router.register('sensor', SensorViewSet, basename='sensor')
+router.register('reading', SensorReadingViewSet, basename='reading')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
