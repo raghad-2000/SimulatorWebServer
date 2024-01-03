@@ -1,6 +1,12 @@
 ## Docker commands
-- docker container prune && docker volume prune 
-- docker compose up --build 
+
+### Fresh start
+- docker container prune
+- docker volume prune 
+- docker compose up --build
+
+### Running
+- docker compose up
 
 ## Utilisateurs
 admin : 
